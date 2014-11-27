@@ -1,0 +1,8 @@
+{
+  "name": "cho",
+  "version": "0.0.1",
+  "description": "A Table Tennis Scoreboard",
+  "dependencies": {
+    "express": "^4.10.4"
+  }
+}
