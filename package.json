@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A Table Tennis Scoreboard",
   "dependencies": {
+    "body-parser": "^1.9.3",
     "express": "^4.10.4"
   }
 }
