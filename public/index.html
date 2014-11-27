@@ -3,7 +3,9 @@
   <head>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="/client.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+    <script type="text/jsx" src="/client.js"></script>
 
     <script type="text/javascript">
       window.socket = io();
@@ -12,6 +14,7 @@
 
   <body>
     <h2>Cho</h2>
+    <div id="scoreboard"></div>
   </body>
 </html>
 

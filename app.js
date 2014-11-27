@@ -4,6 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 
+require('node-jsx').install();
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
