@@ -29,6 +29,7 @@ app.post('/scores/', function (request, response) {
   var player = request.body.player;
   scores[player] += 1;
   singletonSocket.emit('update scores', scores);
+  response.sendStatus(200);
 });
 
 http.listen(3000, function() {

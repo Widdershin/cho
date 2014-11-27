@@ -1,15 +1,25 @@
 var App = (function () { "use strict";
   var pub = {};
+  var scores = {
+    1: 0,
+    2: 0,
+  };
 
-  pub.start = function () {
-    socket.on('update scores', function (scores) {
-      alert(scores);
-    });
-
+  function render() {
+    React.unmountComponentAtNode(document.getElementById('scoreboard'));
     React.render(
-        <ScoreBoard />,
+        <ScoreBoard scores={scores} />,
         document.getElementById('scoreboard')
     );
+  }
+
+  pub.start = function () {
+    socket.on('update scores', function (newScores) {
+      scores = newScores;
+      render();
+    });
+
+    render();
   };
 
   return pub;
@@ -20,9 +30,17 @@ var ScoreBoard = React.createClass({
   render: function() {
     return (
         <div>
-          Hello world!
+          <div>
+            P1 Score: { this.state.scores[1] }
+          </div>
+          <div>
+            P2 Score: { this.state.scores[2] }
+          </div>
         </div>
       );
+  },
+  getInitialState: function () {
+    return this.props;
   }
 });
 
