@@ -7,12 +7,16 @@ var bodyParser = require('body-parser');
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-io.on('connection', function (socket) {
-  console.log('someone connected');
+scores = {
+  1: 0,
+  2: 0,
+};
 
-  socket.on('hello world', function () {
-    console.log('hello world');
-  });
+var singletonSocket = null;
+
+io.on('connection', function (socket) {
+  singletonSocket = socket;
+  console.log('someone connected');
 });
 
 app.get('/', function (request, response) {
@@ -21,7 +25,8 @@ app.get('/', function (request, response) {
 
 app.post('/scores/', function (request, response) {
   var player = request.body.player;
-  response.send(200);
+  scores[player] += 1;
+  singletonSocket.emit('update scores', scores);
 });
 
 http.listen(3000, function() {
