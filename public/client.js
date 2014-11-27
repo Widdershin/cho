@@ -31,16 +31,13 @@ var ScoreBoard = React.createClass({
     return (
         <div>
           <div>
-            P1 Score: { this.state.scores[1] }
+            P1 Score: { this.props.scores[1] }
           </div>
           <div>
-            P2 Score: { this.state.scores[2] }
+            P2 Score: { this.props.scores[2] }
           </div>
         </div>
       );
-  },
-  getInitialState: function () {
-    return this.props;
   }
 });
 
