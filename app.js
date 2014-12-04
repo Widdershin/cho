@@ -10,8 +10,14 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 scores = {
-  1: 0,
-  2: 0,
+  game: {
+    1: 0,
+    2: 0,
+  },
+  match: {
+    1: 0,
+    2: 0,
+  }
 };
 
 var singletonSocket = null;
@@ -27,7 +33,23 @@ app.get('/', function (request, response) {
 
 app.post('/scores/', function (request, response) {
   var player = request.body.player;
-  scores[player] += 1;
+
+  scores.match[player] += 1;
+
+  if (player == 1) {
+    otherPlayer = 2;
+  } else {
+    otherPlayer = 1;
+  }
+
+  if (scores.match[player] > 11 && (scores.match[player] - scores.match[otherPlayer] >= 2)) {
+    scores.game[player] += 1;
+    scores.match = {
+      1: 0,
+      2: 0,
+    };
+  }
+
   singletonSocket.emit('update scores', scores);
   response.sendStatus(200);
 });

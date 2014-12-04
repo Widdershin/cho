@@ -1,8 +1,14 @@
 var App = (function () { "use strict";
   var pub = {};
   var scores = {
-    1: 0,
-    2: 0,
+    game: {
+      1: 0,
+      2: 0,
+    },
+    match: {
+      1: 0,
+      2: 0,
+    }
   };
 
   function render() {
@@ -31,10 +37,16 @@ var ScoreBoard = React.createClass({
     return (
         <div>
           <div>
-            P1 Score: { this.props.scores[1] }
+            P1 Score: { this.props.scores.match[1] }
           </div>
           <div>
-            P2 Score: { this.props.scores[2] }
+            P2 Score: { this.props.scores.match[2] }
+          </div>
+          <div>
+            P1 Game Score: { this.props.scores.game[1] } out of 2
+          </div>
+          <div>
+            P2 Game Score: { this.props.scores.game[2] } out of 2
           </div>
         </div>
       );
