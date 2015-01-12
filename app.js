@@ -42,7 +42,7 @@ app.post('/scores/', function (request, response) {
     otherPlayer = 1;
   }
 
-  if (scores.match[player] > 11 && (scores.match[player] - scores.match[otherPlayer] >= 2)) {
+  if (scores.match[player] >= 11 && (scores.match[player] - scores.match[otherPlayer] >= 2)) {
     scores.game[player] += 1;
     scores.match = {
       1: 0,
