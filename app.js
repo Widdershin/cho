@@ -31,6 +31,9 @@ function resetScores() {
 
 function swapSides() {
   var oldPlayer1Score = scores[1];
+  scores.server = opposite(scores.server);
+  scores.originalServer = opposite(scores.originalServer);
+
   scores[1] = scores[2];
   scores[2] = oldPlayer1Score;
 }
@@ -83,7 +86,11 @@ app.post('/scores/', function (request, response) {
 
     otherPlayer = opposite(player);
 
-    if ((scores[player].match + scores[otherPlayer].match) % 2 === 0) {
+    function playingDeuce() {
+      return (scores[player].match >= 10 && scores[otherPlayer].match >= 10);
+    }
+
+    if ((scores[player].match + scores[otherPlayer].match) % 2 === 0 || playingDeuce()) {
       scores.server = opposite(scores.server);
     }
 
