@@ -1,15 +1,20 @@
-var R_KEY = 114;
+var KEYS = {
+  R: 114,
+  S: 115,
+};
+
 var App = (function () { "use strict";
   var pub = {};
   var scores = {
-    game: {
-      1: 0,
-      2: 0,
+    1: {
+      game: 0,
+      match: 0,
     },
-    match: {
-      1: 0,
-      2: 0,
-    }
+
+    2: {
+      game: 0,
+      match: 0,
+    },
   };
 
   function render() {
@@ -22,8 +27,12 @@ var App = (function () { "use strict";
 
   pub.start = function () {
     $(document).on('keypress', function(e) {
-      if (e.which == R_KEY) {
+      if (e.which == KEYS.R) {
         socket.emit('reset');
+      }
+
+      if (e.which == KEYS.S) {
+        socket.emit('swapSides');
       }
     });
 
@@ -62,19 +71,19 @@ var ScoreBoard = React.createClass({
           <div className="player">
             <h2>Player 1 {player1Serving}</h2>
             <div className="game">
-              { this.props.scores.match[1] }
+              { this.props.scores[1].match }
             </div>
             <div className="match">
-              { this.props.scores.game[1] } games out of 2
+              { this.props.scores[1].game } games out of 2
             </div>
           </div>
           <div className="player">
             <h2>Player 2 {player2Serving}</h2>
             <div className="game">
-              { this.props.scores.match[2] }
+              { this.props.scores[2].match }
             </div>
             <div className="match">
-              { this.props.scores.game[2] } games out of 2
+              { this.props.scores[2].game } games out of 2
             </div>
           </div>
           <div className="message">

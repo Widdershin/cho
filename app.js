@@ -10,17 +10,25 @@ app.use(bodyParser.json());
 var scores;
 function resetScores() {
   scores = {
-    game: {
-      1: 0,
-      2: 0,
+    1: {
+      game: 0,
+      match: 0,
     },
-    match: {
-      1: 0,
-      2: 0,
+
+    2: {
+      game: 0,
+      match: 0,
     },
+
     server: undefined,
     originalServer: undefined,
   };
+}
+
+function swapSides() {
+  var oldPlayer1Score = scores[1];
+  scores[1] = scores[2];
+  scores[2] = oldPlayer1Score;
 }
 
 function opposite(player) {
@@ -42,6 +50,11 @@ io.on('connection', function (socket) {
     resetScores();
     singletonSocket.emit('update scores', scores);
   });
+
+  socket.on('swapSides', function() {
+    swapSides();
+    singletonSocket.emit('update scores', scores);
+  });
 });
 
 app.get('/', function (request, response) {
@@ -52,23 +65,23 @@ app.post('/scores/', function (request, response) {
   var player = request.body.player;
 
   if (scores.server) {
-    scores.match[player] += 1;
+    scores[player].match += 1;
 
     otherPlayer = opposite(player);
 
-    if ((scores.match[player] + scores.match[otherPlayer]) % 2 === 0) {
+    if ((scores[player].match + scores[otherPlayer].match) % 2 === 0) {
       scores.server = opposite(scores.server);
       scores.originalServer = scores.server;
     }
 
-    if (scores.match[player] >= 11 && (scores.match[player] - scores.match[otherPlayer] >= 2)) {
-      scores.game[player] += 1;
+    if (scores[player].match >= 11 && (scores[player].match - scores[otherPlayer].match >= 2)) {
+      scores[player].game += 1;
       scores.match = {
         1: 0,
         2: 0,
       };
 
-      if ((scores.game[player] + scores.game[otherPlayer]) % 2 === 0) {
+      if ((scores[player].game + scores[otherPlayer].game) % 2 === 0) {
         scores.server = scores.originalServer;
       } else {
         scores.server = opposite(scores.originalServer);
