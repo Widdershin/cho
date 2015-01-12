@@ -1,5 +1,6 @@
 body {
   font-family: 'Arial';
+  text-align: center;
 }
 
 .player {
@@ -25,6 +26,7 @@ footer {
 }
 
 .message {
-  margin-top: 20px;
+  margin-top: 50px;
+  font-size: 15pt;
   text-align: center;
 }

@@ -96,7 +96,7 @@ var ScoreBoard = React.createClass({
     var message;
 
     if (!this.props.scores.server) {
-      message = 'The winner of the rally should press their button first';
+      message = 'The winner of the rally should press their button first.';
     }
 
     return (
