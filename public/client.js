@@ -1,6 +1,8 @@
 var KEYS = {
   R: 114,
   S: 115,
+  1: 49,
+  2: 50,
 };
 
 var App = (function () { "use strict";
@@ -21,6 +23,11 @@ var App = (function () { "use strict";
     },
   };
 
+  function changePlayerName(id) {
+    var newName = prompt('Change ' + scores[id].name + "'s name to:");
+    socket.emit('changeName', id, newName);
+  }
+
   function render() {
     React.unmountComponentAtNode(document.getElementById('scoreboard'));
     React.render(
@@ -31,12 +38,21 @@ var App = (function () { "use strict";
 
   pub.start = function () {
     $(document).on('keypress', function(e) {
+      console.log(e.which);
       if (e.which == KEYS.R) {
         socket.emit('reset');
       }
 
       if (e.which == KEYS.S) {
         socket.emit('swapSides');
+      }
+
+      if (e.which == KEYS[1]) {
+        changePlayerName(1);
+      }
+
+      if (e.which == KEYS[2]) {
+        changePlayerName(2);
       }
     });
 
@@ -68,7 +84,7 @@ var PlayerScore = React.createClass({
           { this.props.score.match }
         </div>
         <div className="match">
-          { this.props.score.game } games out of 2
+          { this.props.score.game } games
         </div>
       </div>
     )

@@ -60,6 +60,11 @@ io.on('connection', function (socket) {
     singletonSocket.emit('update scores', scores);
   });
 
+  socket.on('changeName', function(playerId, name) {
+    scores[playerId].name = name;
+    singletonSocket.emit('update scores', scores);
+  });
+
   singletonSocket.emit('update scores', scores);
 });
 
