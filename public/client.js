@@ -38,6 +38,7 @@ var App = (function () { "use strict";
 
     socket.on('update scores', function (newScores) {
       console.log(newScores);
+      document.getElementById('dingSound').play();
       scores = newScores;
       render();
     });
