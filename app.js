@@ -11,13 +11,17 @@ var scores;
 function resetScores() {
   scores = {
     1: {
+      name: 'Player 1',
       game: 0,
       match: 0,
+      isServing: false,
     },
 
     2: {
+      name: 'Player 2',
       game: 0,
       match: 0,
+      isServing: false,
     },
 
     server: undefined,
@@ -55,6 +59,8 @@ io.on('connection', function (socket) {
     swapSides();
     singletonSocket.emit('update scores', scores);
   });
+
+  singletonSocket.emit('update scores', scores);
 });
 
 app.get('/', function (request, response) {
@@ -64,22 +70,22 @@ app.get('/', function (request, response) {
 app.post('/scores/', function (request, response) {
   var player = request.body.player;
 
-  if (scores.server) {
+  if (!scores.server) {
+    scores.server = player;
+    scores.originalServer = scores.server;
+  } else  {
     scores[player].match += 1;
 
     otherPlayer = opposite(player);
 
     if ((scores[player].match + scores[otherPlayer].match) % 2 === 0) {
       scores.server = opposite(scores.server);
-      scores.originalServer = scores.server;
     }
 
     if (scores[player].match >= 11 && (scores[player].match - scores[otherPlayer].match >= 2)) {
       scores[player].game += 1;
-      scores.match = {
-        1: 0,
-        2: 0,
-      };
+      scores[player].match = 0;
+      scores[otherPlayer].match = 0;
 
       if ((scores[player].game + scores[otherPlayer].game) % 2 === 0) {
         scores.server = scores.originalServer;
@@ -87,9 +93,10 @@ app.post('/scores/', function (request, response) {
         scores.server = opposite(scores.originalServer);
       }
     }
-  } else {
-    scores.server = player;
   }
+
+  scores[scores.server].isServing = true;
+  scores[opposite(scores.server)].isServing = false;
 
   singletonSocket.emit('update scores', scores);
   response.sendStatus(200);
