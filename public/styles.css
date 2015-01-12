@@ -1,0 +1,16 @@
+
+.player {
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  text-align: center;
+}
+
+.game {
+  font-size: 40pt;
+  margin: 30px;
+}
+
+.match {
+  font-size: 20pt;
+}

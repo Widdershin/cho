@@ -36,17 +36,23 @@ var ScoreBoard = React.createClass({
   render: function() {
     return (
         <div>
-          <div>
-            P1 Score: { this.props.scores.match[1] }
+          <div className="player">
+            <h2>Player 1</h2>
+            <div className="game">
+              { this.props.scores.match[1] }
+            </div>
+            <div className="match">
+              { this.props.scores.game[1] } games out of 2
+            </div>
           </div>
-          <div>
-            P2 Score: { this.props.scores.match[2] }
-          </div>
-          <div>
-            P1 Game Score: { this.props.scores.game[1] } out of 2
-          </div>
-          <div>
-            P2 Game Score: { this.props.scores.game[2] } out of 2
+          <div className="player">
+            <h2>Player 2</h2>
+            <div className="game">
+              { this.props.scores.match[2] }
+            </div>
+            <div className="match">
+              { this.props.scores.game[2] } games out of 2
+            </div>
           </div>
         </div>
       );
