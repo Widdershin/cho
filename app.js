@@ -19,6 +19,7 @@ function resetScores() {
       2: 0,
     },
     server: undefined,
+    originalServer: undefined,
   };
 }
 
@@ -55,8 +56,9 @@ app.post('/scores/', function (request, response) {
 
     otherPlayer = opposite(player);
 
-    if ((scores.match[player] + scores.match[otherPlayer]) % 2 == 0) {
+    if ((scores.match[player] + scores.match[otherPlayer]) % 2 === 0) {
       scores.server = opposite(scores.server);
+      scores.originalServer = scores.server;
     }
 
     if (scores.match[player] >= 11 && (scores.match[player] - scores.match[otherPlayer] >= 2)) {
@@ -65,6 +67,12 @@ app.post('/scores/', function (request, response) {
         1: 0,
         2: 0,
       };
+
+      if ((scores.game[player] + scores.game[otherPlayer]) % 2 === 0) {
+        scores.server = scores.originalServer;
+      } else {
+        scores.server = opposite(scores.originalServer);
+      }
     }
   } else {
     scores.server = player;
