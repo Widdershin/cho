@@ -1,3 +1,4 @@
+var R_KEY = 114;
 var App = (function () { "use strict";
   var pub = {};
   var scores = {
@@ -20,6 +21,12 @@ var App = (function () { "use strict";
   }
 
   pub.start = function () {
+    $(document).on('keypress', function(e) {
+      if (e.which == R_KEY) {
+        socket.emit('reset');
+      }
+    });
+
     socket.on('update scores', function (newScores) {
       scores = newScores;
       render();

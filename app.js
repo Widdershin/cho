@@ -9,22 +9,31 @@ require('node-jsx').install();
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-scores = {
-  game: {
-    1: 0,
-    2: 0,
-  },
-  match: {
-    1: 0,
-    2: 0,
-  }
-};
+var scores;
+function resetScores() {
+  scores = {
+    game: {
+      1: 0,
+      2: 0,
+    },
+    match: {
+      1: 0,
+      2: 0,
+    }
+  };
+}
+
+resetScores();
 
 var singletonSocket = null;
 
 io.on('connection', function (socket) {
   singletonSocket = socket;
-  console.log('someone connected');
+
+  socket.on('reset', function() {
+    resetScores();
+    singletonSocket.emit('update scores', scores);
+  });
 });
 
 app.get('/', function (request, response) {
