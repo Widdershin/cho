@@ -23,3 +23,8 @@ footer {
   font-size: 15pt;
   margin-top: 50px;
 }
+
+.message {
+  margin-top: 20px;
+  text-align: center;
+}

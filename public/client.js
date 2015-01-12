@@ -28,6 +28,7 @@ var App = (function () { "use strict";
     });
 
     socket.on('update scores', function (newScores) {
+      console.log(newScores);
       scores = newScores;
       render();
     });
@@ -41,10 +42,25 @@ var App = (function () { "use strict";
 
 var ScoreBoard = React.createClass({
   render: function() {
+    var message;
+    if (!this.props.scores.server) {
+      message = 'The winner of the rally should press their button first';
+    }
+
+    var player1Serving, player2Serving;
+
+    if (this.props.scores.server == 1) {
+      player1Serving = ' (Serving)';
+    }
+
+    if (this.props.scores.server == 2) {
+      player2Serving = ' (Serving)';
+    }
+
     return (
         <div>
           <div className="player">
-            <h2>Player 1</h2>
+            <h2>Player 1 {player1Serving}</h2>
             <div className="game">
               { this.props.scores.match[1] }
             </div>
@@ -53,13 +69,16 @@ var ScoreBoard = React.createClass({
             </div>
           </div>
           <div className="player">
-            <h2>Player 2</h2>
+            <h2>Player 2 {player2Serving}</h2>
             <div className="game">
               { this.props.scores.match[2] }
             </div>
             <div className="match">
               { this.props.scores.game[2] } games out of 2
             </div>
+          </div>
+          <div className="message">
+            {message}
           </div>
         </div>
       );

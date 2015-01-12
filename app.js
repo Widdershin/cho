@@ -4,8 +4,6 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 
-require('node-jsx').install();
-
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
@@ -19,8 +17,17 @@ function resetScores() {
     match: {
       1: 0,
       2: 0,
-    }
+    },
+    server: undefined,
   };
+}
+
+function opposite(player) {
+  if (player == 1) {
+    return 2;
+  } else {
+    return 1;
+  }
 }
 
 resetScores();
@@ -43,20 +50,24 @@ app.get('/', function (request, response) {
 app.post('/scores/', function (request, response) {
   var player = request.body.player;
 
-  scores.match[player] += 1;
+  if (scores.server) {
+    scores.match[player] += 1;
 
-  if (player == 1) {
-    otherPlayer = 2;
+    otherPlayer = opposite(player);
+
+    if ((scores.match[player] + scores.match[otherPlayer]) % 2 == 0) {
+      scores.server = opposite(scores.server);
+    }
+
+    if (scores.match[player] >= 11 && (scores.match[player] - scores.match[otherPlayer] >= 2)) {
+      scores.game[player] += 1;
+      scores.match = {
+        1: 0,
+        2: 0,
+      };
+    }
   } else {
-    otherPlayer = 1;
-  }
-
-  if (scores.match[player] >= 11 && (scores.match[player] - scores.match[otherPlayer] >= 2)) {
-    scores.game[player] += 1;
-    scores.match = {
-      1: 0,
-      2: 0,
-    };
+    scores.server = player;
   }
 
   singletonSocket.emit('update scores', scores);
